@@ -23,7 +23,7 @@ var UIController = (function () {
                 value: document.querySelector(DOMStrings.inputValue).valueAsNumber
             };
         },
-        
+
         getDOMStrings: function () {
             return DOMStrings;
         }
@@ -34,8 +34,21 @@ var UIController = (function () {
 // 글로벌 앱 컨트롤러
 var controller = (function (budgetCtrl, UICtrl) {
 
-    // UIController에 정의해 둔 CSS 선택자를 꺼낸다
-    var DOM = UICtrl.getDOMStrings();
+    // 이벤트 리스너 함수
+    var setupEventListeners = function () {
+        // UIController에 정의해 둔 CSS 선택자를 꺼낸다
+        var DOM = UICtrl.getDOMStrings();
+        // 이벤트 리스너 1. 체크 버튼을 누를 경우
+        document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
+
+        // 이벤트 리스너 2. enter 키를 누를 경우
+        document.addEventListener('keypress', function (event) {
+
+            if (event.keyCode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
+    };
 
     // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
     var ctrlAddItem = function () {
@@ -55,15 +68,14 @@ var controller = (function (budgetCtrl, UICtrl) {
 
     };
 
-    // 이벤트 리스너 1. 체크 버튼을 누를 경우
-    document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
-
-    // 이벤트 리스너 2. enter 키를 누를 경우
-    document.addEventListener('keypress', function (event) {
-
-        if (event.keyCode === 13 || event.which === 13) {
-            ctrlAddItem();
+    return {
+        init: function () {
+            console.log('app has started.');
+            setupEventListeners();
         }
-    });
+    }
 
 })(budgetController, UIController);
+
+// 컨트롤러 함수를 초기화
+controller.init();
