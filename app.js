@@ -66,7 +66,9 @@ var UIController = (function () {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        inputButton: '.add__btn'
+        inputButton: '.add__btn',
+        incomeContainer: '.income__list',
+        expenseContainer: '.expenses__list'
     };
 
     return {
@@ -77,6 +79,37 @@ var UIController = (function () {
                 description: document.querySelector(DOMStrings.inputDescription).value,
                 value: document.querySelector(DOMStrings.inputValue).valueAsNumber
             };
+        },
+
+        addListItem: function (obj, type) {
+            var html, newHtml, element;
+
+            // placeholder text를 만든다
+            if (type === 'inc') {
+                html = '<div class="item clearfix" id="income-%id%">' +
+                    '<div class="item__description">%description%</div>' +
+                    '<div class="right clearfix"><div class="item__value">%value%</div>' +
+                    '<div class="item__delete">' +
+                    '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' +
+                    '</div></div></div>';
+                element = DOMStrings.incomeContainer;
+            } else if (type === 'exp') {
+                html = '<div class="item clearfix" id="expense-%id%">' +
+                    '<div class="item__description">%description%</div>' +
+                    '<div class="right clearfix"><div class="item__value">%value%</div>' +
+                    '<div class="item__percentage">21%</div><div class="item__delete">' +
+                    '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' +
+                    '</div></div></div>';
+                element = DOMStrings.expenseContainer;
+            }
+
+            // placeholder text를 실제 객체로 바꾼다
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+
+            // 값을 HTML 위에 띄운다
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
         getDOMStrings: function () {
@@ -118,6 +151,7 @@ var controller = (function (budgetCtrl, UICtrl) {
         console.log(newItem);
 
         //    3. item을 UI에 추가하기
+        UICtrl.addListItem(newItem, input.type);
 
         //    4. 예산을 계산하기
 
