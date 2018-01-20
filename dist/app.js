@@ -1,36 +1,38 @@
+'use strict';
+
 // 예산 컨트롤러
-const budgetController = (function () {
-  const Expense = function (id, description, value) {
+var budgetController = function () {
+  var Expense = function Expense(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
   };
 
-  const Income = function (id, description, value) {
+  var Income = function Income(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
   };
 
-  const allExpenses = [];
-  const allIncomes = [];
-  const totalExpenses = 0;
+  var allExpenses = [];
+  var allIncomes = [];
+  var totalExpenses = 0;
 
-  const data = {
+  var data = {
     allItems: {
       exp: [],
-      inc: [],
+      inc: []
     },
     totals: {
       exp: 0,
-      inc: 0,
-    },
+      inc: 0
+    }
   };
 
   return {
-    addItem(type, des, val) {
-      let newItem;
-      let ID;
+    addItem: function addItem(type, des, val) {
+      var newItem = void 0;
+      var ID = void 0;
 
       // 아이디는 배열 마지막 아이템의 아이디 +1 이다
       if (data.allItems[type].length > 0) {
@@ -46,54 +48,42 @@ const budgetController = (function () {
         newItem = new Income(ID, des, val);
       }
 
-
       data.allItems[type].push(newItem);
       return newItem;
-    },
+    }
   };
-}());
+}();
 
 // UI 컨트롤러
-const UIController = (function () {
-  const DOMStrings = {
+var UIController = function () {
+  var DOMStrings = {
     inputType: '.add__type',
     inputDescription: '.add__description',
     inputValue: '.add__value',
     inputButton: '.add__btn',
     incomeContainer: '.income__list',
-    expenseContainer: '.expenses__list',
+    expenseContainer: '.expenses__list'
   };
 
   return {
-    getInput() {
+    getInput: function getInput() {
       return {
         type: document.querySelector(DOMStrings.inputType).value,
         description: document.querySelector(DOMStrings.inputDescription).value,
-        value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
+        value: document.querySelector(DOMStrings.inputValue).valueAsNumber
       };
     },
-
-    addListItem(obj, type) {
-      let html;
-      let newHtml;
-      let element;
+    addListItem: function addListItem(obj, type) {
+      var html = void 0;
+      var newHtml = void 0;
+      var element = void 0;
 
       // placeholder text를 만든다
       if (type === 'inc') {
-        html = '<div class="item clearfix" id="income-%id%">' +
-          '<div class="item__description">%description%</div>' +
-          '<div class="right clearfix"><div class="item__value">%value%</div>' +
-          '<div class="item__delete">' +
-          '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' +
-          '</div></div></div>';
+        html = '<div class="item clearfix" id="income-%id%">' + '<div class="item__description">%description%</div>' + '<div class="right clearfix"><div class="item__value">%value%</div>' + '<div class="item__delete">' + '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' + '</div></div></div>';
         element = DOMStrings.incomeContainer;
       } else if (type === 'exp') {
-        html = '<div class="item clearfix" id="expense-%id%">' +
-          '<div class="item__description">%description%</div>' +
-          '<div class="right clearfix"><div class="item__value">%value%</div>' +
-          '<div class="item__percentage">21%</div><div class="item__delete">' +
-          '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' +
-          '</div></div></div>';
+        html = '<div class="item clearfix" id="expense-%id%">' + '<div class="item__description">%description%</div>' + '<div class="right clearfix"><div class="item__value">%value%</div>' + '<div class="item__percentage">21%</div><div class="item__delete">' + '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' + '</div></div></div>';
         element = DOMStrings.expenseContainer;
       }
 
@@ -105,32 +95,30 @@ const UIController = (function () {
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
+    clearFields: function clearFields() {
+      var fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
 
-    clearFields() {
-      const fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
+      var fieldsArr = Array.prototype.slice.call(fields);
 
-      const fieldsArr = Array.prototype.slice.call(fields);
-
-      fieldsArr.forEach((element) => {
+      fieldsArr.forEach(function (element) {
         element.value = '';
       });
     },
-
-    getDOMStrings() {
+    getDOMStrings: function getDOMStrings() {
       return DOMStrings;
-    },
+    }
   };
-}());
+}();
 
 // 글로벌 앱 컨트롤러
-const controller = (function (budgetCtrl, UICtrl) {
+var controller = function (budgetCtrl, UICtrl) {
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
-  const ctrlAddItem = function () {
+  var ctrlAddItem = function ctrlAddItem() {
     //    1. input data를 item에  담기
-    const input = UICtrl.getInput();
+    var input = UICtrl.getInput();
 
     //    2. item을 budget controller에 넘기기
-    const newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+    var newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
     //    3. item을 UI에 추가하기
     UICtrl.addListItem(newItem, input.type);
@@ -140,14 +128,14 @@ const controller = (function (budgetCtrl, UICtrl) {
   };
 
   // 이벤트 리스너 함수
-  const setupEventListeners = function () {
+  var setupEventListeners = function setupEventListeners() {
     // UIController에 정의해 둔 CSS 선택자를 꺼낸다
-    const DOM = UICtrl.getDOMStrings();
+    var DOM = UICtrl.getDOMStrings();
     // 이벤트 리스너 1. 체크 버튼을 누를 경우
     document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
 
     // 이벤트 리스너 2. enter 키를 누를 경우
-    document.addEventListener('keypress', (event) => {
+    document.addEventListener('keypress', function (event) {
       if (event.keyCode === 13 || event.which === 13) {
         ctrlAddItem();
       }
@@ -155,20 +143,20 @@ const controller = (function (budgetCtrl, UICtrl) {
   };
 
   // 총 예산 업데이트 함수
-  const updateBudget = function () {
+  var updateBudget = function updateBudget() {
     //    1. 예산을 계산하기
 
     //    2. 예산을 UI에 띄우기
 
   };
 
-
   return {
-    init() {
+    init: function init() {
       setupEventListeners();
-    },
+    }
   };
-}(budgetController, UIController));
+}(budgetController, UIController);
 
 // 컨트롤러 함수를 초기화
 controller.init();
+//# sourceMappingURL=app.js.map
