@@ -1,16 +1,16 @@
 // 예산 컨트롤러
-const budgetController = (function () {
-  const Expense = function (id, description, value) {
+const budgetController = (() => {
+  function Expense(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
-  };
+  }
 
-  const Income = function (id, description, value) {
+  function Income(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
-  };
+  }
 
   const allExpenses = [];
   const allIncomes = [];
@@ -28,7 +28,7 @@ const budgetController = (function () {
   };
 
   return {
-    addItem(type, des, val) {
+    addItem: (type, des, val) => {
       let newItem;
       let ID;
 
@@ -46,15 +46,14 @@ const budgetController = (function () {
         newItem = new Income(ID, des, val);
       }
 
-
       data.allItems[type].push(newItem);
       return newItem;
     },
   };
-}());
+})();
 
 // UI 컨트롤러
-const UIController = (function () {
+const UIController = (() => {
   const DOMStrings = {
     inputType: '.add__type',
     inputDescription: '.add__description',
@@ -65,15 +64,13 @@ const UIController = (function () {
   };
 
   return {
-    getInput() {
-      return {
-        type: document.querySelector(DOMStrings.inputType).value,
-        description: document.querySelector(DOMStrings.inputDescription).value,
-        value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
-      };
-    },
+    getInput: () => ({
+      type: document.querySelector(DOMStrings.inputType).value,
+      description: document.querySelector(DOMStrings.inputDescription).value,
+      value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
+    }),
 
-    addListItem(obj, type) {
+    addListItem: (obj, type) => {
       let html;
       let newHtml;
       let element;
@@ -106,26 +103,25 @@ const UIController = (function () {
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
 
-    clearFields() {
+    clearFields: () => {
       const fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
 
       const fieldsArr = Array.prototype.slice.call(fields);
 
       fieldsArr.forEach((element) => {
-        element.value = '';
+        const param = element;
+        param.value = '';
       });
     },
 
-    getDOMStrings() {
-      return DOMStrings;
-    },
+    getDOMStrings: () => DOMStrings,
   };
-}());
+})();
 
 // 글로벌 앱 컨트롤러
-const controller = (function (budgetCtrl, UICtrl) {
+const controller = ((budgetCtrl, UICtrl) => {
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
-  const ctrlAddItem = function () {
+  const ctrlAddItem = () => {
     //    1. input data를 item에  담기
     const input = UICtrl.getInput();
 
@@ -140,9 +136,10 @@ const controller = (function (budgetCtrl, UICtrl) {
   };
 
   // 이벤트 리스너 함수
-  const setupEventListeners = function () {
+  const setupEventListeners = () => {
     // UIController에 정의해 둔 CSS 선택자를 꺼낸다
     const DOM = UICtrl.getDOMStrings();
+
     // 이벤트 리스너 1. 체크 버튼을 누를 경우
     document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
 
@@ -155,20 +152,19 @@ const controller = (function (budgetCtrl, UICtrl) {
   };
 
   // 총 예산 업데이트 함수
-  const updateBudget = function () {
+  const updateBudget = () => {
     //    1. 예산을 계산하기
 
     //    2. 예산을 UI에 띄우기
 
   };
 
-
   return {
     init() {
       setupEventListeners();
     },
   };
-}(budgetController, UIController));
+})(budgetController, UIController);
 
 // 컨트롤러 함수를 초기화
 controller.init();

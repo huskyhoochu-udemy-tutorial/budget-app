@@ -2,17 +2,17 @@
 
 // 예산 컨트롤러
 var budgetController = function () {
-  var Expense = function Expense(id, description, value) {
+  function Expense(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
-  };
+  }
 
-  var Income = function Income(id, description, value) {
+  function Income(id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
-  };
+  }
 
   var allExpenses = [];
   var allIncomes = [];
@@ -73,6 +73,7 @@ var UIController = function () {
         value: document.querySelector(DOMStrings.inputValue).valueAsNumber
       };
     },
+
     addListItem: function addListItem(obj, type) {
       var html = void 0;
       var newHtml = void 0;
@@ -95,15 +96,18 @@ var UIController = function () {
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
+
     clearFields: function clearFields() {
       var fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
 
       var fieldsArr = Array.prototype.slice.call(fields);
 
       fieldsArr.forEach(function (element) {
-        element.value = '';
+        var param = element;
+        param.value = '';
       });
     },
+
     getDOMStrings: function getDOMStrings() {
       return DOMStrings;
     }
@@ -131,6 +135,7 @@ var controller = function (budgetCtrl, UICtrl) {
   var setupEventListeners = function setupEventListeners() {
     // UIController에 정의해 둔 CSS 선택자를 꺼낸다
     var DOM = UICtrl.getDOMStrings();
+
     // 이벤트 리스너 1. 체크 버튼을 누를 경우
     document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
 
