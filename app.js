@@ -112,6 +112,19 @@ var UIController = (function () {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        clearFields: function () {
+            var fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+            console.log(fields);
+            fieldsArr = Array.prototype.slice.call(fields);
+            console.log(fieldsArr);
+            fieldsArr.forEach(function (current, index, array) {
+                current.value = "";
+
+            });
+        },
+
         getDOMStrings: function () {
             return DOMStrings;
         }
@@ -144,18 +157,19 @@ var controller = (function (budgetCtrl, UICtrl) {
 
         //    1. input data를 item에  담기
         input = UICtrl.getInput();
-        console.log(input);
 
         //    2. item을 budget controller에 넘기기
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
-        console.log(newItem);
 
         //    3. item을 UI에 추가하기
         UICtrl.addListItem(newItem, input.type);
 
-        //    4. 예산을 계산하기
+        //    4. input 창을 지우기
+        UICtrl.clearFields();
 
-        //    5. 예산을 UI에 띄우기
+        //    5. 예산을 계산하기
+
+        //    6. 예산을 UI에 띄우기
 
 
     };
