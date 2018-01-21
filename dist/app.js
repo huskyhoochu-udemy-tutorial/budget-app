@@ -57,19 +57,19 @@ var budgetController = function () {
 // UI 컨트롤러
 var UIController = function () {
   var DOMStrings = {
-    inputType: '.add__type',
-    inputDescription: '.add__description',
-    inputValue: '.add__value',
-    inputButton: '.add__btn',
+    expenseContainer: '.expenses__list',
     incomeContainer: '.income__list',
-    expenseContainer: '.expenses__list'
+    inputButton: '.add__btn',
+    inputDescription: '.add__description',
+    inputType: '.add__type',
+    inputValue: '.add__value'
   };
 
   return {
     getInput: function getInput() {
       return {
-        type: document.querySelector(DOMStrings.inputType).value,
         description: document.querySelector(DOMStrings.inputDescription).value,
+        type: document.querySelector(DOMStrings.inputType).value,
         value: document.querySelector(DOMStrings.inputValue).valueAsNumber
       };
     },
@@ -103,8 +103,7 @@ var UIController = function () {
       var fieldsArr = Array.prototype.slice.call(fields);
 
       fieldsArr.forEach(function (element) {
-        var param = element;
-        param.value = '';
+        element.value = '';
       });
     },
 

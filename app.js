@@ -55,18 +55,18 @@ const budgetController = (() => {
 // UI 컨트롤러
 const UIController = (() => {
   const DOMStrings = {
-    inputType: '.add__type',
-    inputDescription: '.add__description',
-    inputValue: '.add__value',
-    inputButton: '.add__btn',
-    incomeContainer: '.income__list',
     expenseContainer: '.expenses__list',
+    incomeContainer: '.income__list',
+    inputButton: '.add__btn',
+    inputDescription: '.add__description',
+    inputType: '.add__type',
+    inputValue: '.add__value',
   };
 
   return {
     getInput: () => ({
-      type: document.querySelector(DOMStrings.inputType).value,
       description: document.querySelector(DOMStrings.inputDescription).value,
+      type: document.querySelector(DOMStrings.inputType).value,
       value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
     }),
 
@@ -109,8 +109,7 @@ const UIController = (() => {
       const fieldsArr = Array.prototype.slice.call(fields);
 
       fieldsArr.forEach((element) => {
-        const param = element;
-        param.value = '';
+        element.value = '';
       });
     },
 
