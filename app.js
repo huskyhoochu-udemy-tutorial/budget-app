@@ -100,7 +100,6 @@ const UIController = (() => {
       type: document.querySelector(DOMStrings.inputType).value,
       value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
     }),
-
     addListItem: (obj, type) => {
       let html;
       let newHtml;
@@ -133,7 +132,6 @@ const UIController = (() => {
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
-
     clearFields: () => {
       const fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
 
@@ -144,7 +142,6 @@ const UIController = (() => {
         result.value = '';
       });
     },
-
     displayBudget: (obj) => {
       document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
       document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
