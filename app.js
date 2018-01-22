@@ -119,19 +119,36 @@ const UIController = (() => {
 
 // 글로벌 앱 컨트롤러
 const controller = ((budgetCtrl, UICtrl) => {
+  // 총 예산 업데이트 함수
+  const updateBudget = () => {
+    //    1. 예산을 계산하기
+
+    //    2. 예산을 리턴하기
+
+    //    3. 예산을 UI에 띄우기
+
+  };
+
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
   const ctrlAddItem = () => {
     //    1. input data를 item에  담기
     const input = UICtrl.getInput();
 
-    //    2. item을 budget controller에 넘기기
-    const newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+    // NaN 값이 들어오는 걸 방지하기 위해 조건문 설정
+    // description 값이 들어와야 하며, value가 isNaN이어서는 안 되며, value는 0보다 커야 한다
+    if (input.description !== '' && !Number.isNaN(input.value) && input.value > 0) {
+      //    2. item을 budget controller에 넘기기
+      const newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-    //    3. item을 UI에 추가하기
-    UICtrl.addListItem(newItem, input.type);
+      //    3. item을 UI에 추가하기
+      UICtrl.addListItem(newItem, input.type);
 
-    //    4. input 창을 지우기
-    UICtrl.clearFields();
+      //    4. input 창을 지우기
+      UICtrl.clearFields();
+
+      //    5. 예산을 계산하고 업데이트하기
+      updateBudget();
+    }
   };
 
   // 이벤트 리스너 함수
@@ -148,14 +165,6 @@ const controller = ((budgetCtrl, UICtrl) => {
         ctrlAddItem();
       }
     });
-  };
-
-  // 총 예산 업데이트 함수
-  const updateBudget = () => {
-    //    1. 예산을 계산하기
-
-    //    2. 예산을 UI에 띄우기
-
   };
 
   return {
