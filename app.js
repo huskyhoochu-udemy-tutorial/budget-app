@@ -12,10 +12,6 @@ const budgetController = (() => {
     this.value = value;
   }
 
-  const allExpenses = [];
-  const allIncomes = [];
-  const totalExpenses = 0;
-
   const data = {
     allItems: {
       exp: [],
@@ -25,6 +21,16 @@ const budgetController = (() => {
       exp: 0,
       inc: 0,
     },
+    budget: 0,
+    percentage: -1,
+  };
+
+  const calculateTotal = (type) => {
+    let sum = 0;
+    data.allItems[type].forEach((cur) => {
+      sum += cur.value;
+    });
+    data.totals[type] = sum;
   };
 
   return {
@@ -49,6 +55,27 @@ const budgetController = (() => {
       data.allItems[type].push(newItem);
       return newItem;
     },
+    calculateBudget: () => {
+      //  총 수입 / 지출 계산
+      calculateTotal('exp');
+      calculateTotal('inc');
+
+      //  총 예산 계산: 수입 - 지출
+      data.budget = data.totals.inc - data.totals.exp;
+
+      //  총 수입 대비 지출율 계산
+      if (data.totals.inc > 0) {
+        data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+      } else {
+        data.percentage = -1;
+      }
+    },
+    getBudget: () => ({
+      budget: data.budget,
+      totalInc: data.totals.inc,
+      totalExp: data.totals.exp,
+      percentage: data.percentage,
+    }),
   };
 })();
 
@@ -109,7 +136,8 @@ const UIController = (() => {
       const fieldsArr = Array.prototype.slice.call(fields);
 
       fieldsArr.forEach((element) => {
-        element.value = '';
+        const result = element;
+        result.value = '';
       });
     },
 
@@ -122,11 +150,13 @@ const controller = ((budgetCtrl, UICtrl) => {
   // 총 예산 업데이트 함수
   const updateBudget = () => {
     //    1. 예산을 계산하기
+    budgetCtrl.calculateBudget();
 
     //    2. 예산을 리턴하기
+    const budget = budgetCtrl.getBudget();
 
     //    3. 예산을 UI에 띄우기
-
+    console.log(budget);
   };
 
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
