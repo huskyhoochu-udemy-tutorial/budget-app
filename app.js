@@ -88,6 +88,10 @@ const UIController = (() => {
     inputDescription: '.add__description',
     inputType: '.add__type',
     inputValue: '.add__value',
+    budgetLabel: '.budget__value',
+    incomeLabel: '.budget__income--value',
+    expensesLabel: '.budget__expenses--value',
+    percentageLabel: '.budget__expenses--percentage',
   };
 
   return {
@@ -141,6 +145,17 @@ const UIController = (() => {
       });
     },
 
+    displayBudget: (obj) => {
+      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+
+      if (obj.percentage > 0) {
+        document.querySelector(DOMStrings.percentageLabel).textContent = `${obj.percentage}%`;
+      } else {
+        document.querySelector(DOMStrings.percentageLabel).textContent = '---';
+      }
+    },
     getDOMStrings: () => DOMStrings,
   };
 })();
@@ -156,7 +171,7 @@ const controller = ((budgetCtrl, UICtrl) => {
     const budget = budgetCtrl.getBudget();
 
     //    3. 예산을 UI에 띄우기
-    console.log(budget);
+    UICtrl.displayBudget(budget);
   };
 
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
@@ -199,6 +214,12 @@ const controller = ((budgetCtrl, UICtrl) => {
 
   return {
     init() {
+      UICtrl.displayBudget({
+        budget: 0,
+        totalInc: 0,
+        totalExp: 0,
+        percentage: -1,
+      });
       setupEventListeners();
     },
   };
