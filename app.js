@@ -202,6 +202,13 @@ const controller = ((budgetCtrl, UICtrl) => {
     UICtrl.displayBudget(budget);
   };
 
+  // 수입 대비 지출 계산 함수
+  const updatePercentages = () => {
+    //    1. percentage 계산
+    //    2. budget controller에서 percentage 읽기
+    //    3. UI에 업데이트하기
+  };
+
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
   const ctrlAddItem = () => {
     //    1. input data를 item에  담기
@@ -221,6 +228,9 @@ const controller = ((budgetCtrl, UICtrl) => {
 
       //    5. 예산을 계산하고 업데이트하기
       updateBudget();
+
+      //    6. percentage 계산하고 업데이트하기
+      updatePercentages();
     }
   };
 
@@ -230,7 +240,7 @@ const controller = ((budgetCtrl, UICtrl) => {
     if (itemID) {
       const splitID = itemID.split('-');
       const type = splitID[0];
-      const ID = parseInt(splitID[1], 10);
+      const ID = parseInt(splitID[1], 10); // 10진수 정수로 변환
 
       //  1. item을 자료구조에서 삭제
       budgetCtrl.deleteItem(type, ID);
