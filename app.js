@@ -55,6 +55,19 @@ const budgetController = (() => {
       data.allItems[type].push(newItem);
       return newItem;
     },
+    deleteItem: (type, id) => {
+      // allItems.type array의 요소마다 콜백 함수를 적용해 새로운 array를 반환한다
+      // ids는 allItems.type의 각 요소들의 id 값으로 이루어진 array가 된다
+      const ids = data.allItems[type].map(current => current.id);
+
+      // id 값으로 이루어진 array에서 id 값에 해당하는 index를 찾는다
+      const index = ids.indexOf(id);
+
+      // 아이템이 존재하기면 하면 작동하도록 함(index는 0부터 시작되는 양의 정수니까)
+      if (index !== -1) {
+        data.allItems[type].splice(index, 1);
+      }
+    },
     calculateBudget: () => {
       //  총 수입 / 지출 계산
       calculateTotal('exp');
@@ -92,6 +105,7 @@ const UIController = (() => {
     incomeLabel: '.budget__income--value',
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
+    container: '.container',
   };
 
   return {
@@ -107,7 +121,7 @@ const UIController = (() => {
 
       // placeholder text를 만든다
       if (type === 'inc') {
-        html = '<div class="item clearfix" id="income-%id%">' +
+        html = '<div class="item clearfix" id="inc-%id%">' +
           '<div class="item__description">%description%</div>' +
           '<div class="right clearfix"><div class="item__value">%value%</div>' +
           '<div class="item__delete">' +
@@ -115,7 +129,7 @@ const UIController = (() => {
           '</div></div></div>';
         element = DOMStrings.incomeContainer;
       } else if (type === 'exp') {
-        html = '<div class="item clearfix" id="expense-%id%">' +
+        html = '<div class="item clearfix" id="exp-%id%">' +
           '<div class="item__description">%description%</div>' +
           '<div class="right clearfix"><div class="item__value">%value%</div>' +
           '<div class="item__percentage">21%</div><div class="item__delete">' +
@@ -193,6 +207,23 @@ const controller = ((budgetCtrl, UICtrl) => {
     }
   };
 
+  // DOM 객체를 삭제하는 함수
+  const ctrlDeleteItem = (event) => {
+    const itemID = event.target.parentNode.parentNode.parentNode.id;
+    if (itemID) {
+      const splitID = itemID.split('-');
+      const type = splitID[0];
+      const ID = parseInt(splitID[1], 10);
+
+      //  1. item을 자료구조에서 삭제
+      budgetCtrl.deleteItem(type, ID);
+
+      //  2. item을 UI에서 삭제
+
+      //  3. 예산을 업데이트하고 새로운 예산을 보여줌
+    }
+  };
+
   // 이벤트 리스너 함수
   const setupEventListeners = () => {
     // UIController에 정의해 둔 CSS 선택자를 꺼낸다
@@ -207,6 +238,9 @@ const controller = ((budgetCtrl, UICtrl) => {
         ctrlAddItem();
       }
     });
+
+    // 이벤트 리스너 3. delete 버튼을 누를 경우
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
   };
 
   return {
