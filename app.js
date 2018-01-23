@@ -109,11 +109,14 @@ const UIController = (() => {
   };
 
   return {
+    // input 값을 DOM 객체로 만드는 함수
     getInput: () => ({
       description: document.querySelector(DOMStrings.inputDescription).value,
       type: document.querySelector(DOMStrings.inputType).value,
       value: document.querySelector(DOMStrings.inputValue).valueAsNumber,
     }),
+
+    // DOM 객체를 이용해 HTML 아이템을 만들어 리스트에 띄우는 함수
     addListItem: (obj, type) => {
       let html;
       let newHtml;
@@ -146,6 +149,16 @@ const UIController = (() => {
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
+
+    // HTML 아이템을 삭제하는 함수
+    deleteListItem: (selectorID) => {
+      // 삭제하려는 요소의 부모 요소를 지정한다
+      const element = document.getElementById(selectorID);
+      // 부모 요소의 자식 요소를 삭제하는데, 그 인자는 부모 요소가 된다
+      element.parentNode.removeChild(element);
+    },
+
+    // 입력이 끝난 뒤 input fields를 초기화시키는 함수
     clearFields: () => {
       const fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
 
@@ -156,6 +169,8 @@ const UIController = (() => {
         result.value = '';
       });
     },
+
+    // 총 예산 현황을 HTML 요소에 대입해 띄우는 함수
     displayBudget: (obj) => {
       document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
       document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
@@ -167,6 +182,8 @@ const UIController = (() => {
         document.querySelector(DOMStrings.percentageLabel).textContent = '---';
       }
     },
+
+    // DOMStrings object를 호출하는 함수
     getDOMStrings: () => DOMStrings,
   };
 })();
@@ -219,6 +236,7 @@ const controller = ((budgetCtrl, UICtrl) => {
       budgetCtrl.deleteItem(type, ID);
 
       //  2. item을 UI에서 삭제
+      UICtrl.deleteListItem(itemID);
 
       //  3. 예산을 업데이트하고 새로운 예산을 보여줌
     }
