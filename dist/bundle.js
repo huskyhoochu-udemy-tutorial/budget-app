@@ -222,6 +222,13 @@ var UIController = function () {
     return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   };
 
+  // 각 노드 요소에 대해 콜백 함수를 적용하기 위한 함수
+  var nodeListForEach = function nodeListForEach(list, callback) {
+    for (var i = 0; i < list.length; i += 1) {
+      callback(list[i], i);
+    }
+  };
+
   return {
     // input 값을 DOM 객체로 만드는 함수
     getInput: function getInput() {
@@ -298,11 +305,7 @@ var UIController = function () {
     // percentage를 계산해서 화면에 띄우는 함수
     displayPercentages: function displayPercentages(percentages) {
       var fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
-      var nodeListForEach = function nodeListForEach(list, callback) {
-        for (var i = 0; i < list.length; i += 1) {
-          callback(list[i], i);
-        }
-      };
+
       nodeListForEach(fields, function (current, index) {
         var result = current;
         if (percentages[index] > 0) {
@@ -319,6 +322,16 @@ var UIController = function () {
       var year = now.getFullYear();
       var month = '' + ('0' + (now.getMonth() + 1)).slice(-2);
       document.querySelector(DOMStrings.dateLabel).textContent = year + '-' + month;
+    },
+
+    // 수입/지출 타입을 바꾸는 함수
+    changedType: function changedType() {
+      var fields = document.querySelectorAll(DOMStrings.inputType + ',' + DOMStrings.inputDescription + ',' + DOMStrings.inputValue);
+
+      nodeListForEach(fields, function (cur) {
+        cur.classList.add('red-focus');
+      });
+      document.querySelector(DOMStrings.inputButton).classList.toggle('red');
     },
 
     // DOMStrings object를 호출하는 함수
@@ -414,6 +427,9 @@ var controller = function (budgetCtrl, UICtrl) {
 
     // 이벤트 리스너 3. delete 버튼을 누를 경우
     document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+    // 이벤트 리스너 4. 드롭다운 버튼을 선택했을 경우
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
   };
 
   return {
