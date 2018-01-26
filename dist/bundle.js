@@ -208,6 +208,19 @@ var UIController = function () {
     expensesPercLabel: '.item__percentage'
   };
 
+  // 숫자 포맷을 정하는 함수
+  var formatNumber = function formatNumber(num, type) {
+    var numAbs = Math.abs(num);
+    var numFixed = numAbs.toFixed(2);
+    var numSplit = numFixed.split('.');
+    var int = numSplit[0];
+    if (int.length > 3) {
+      int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);
+    }
+    var dec = numSplit[1];
+    return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+  };
+
   return {
     // input 값을 DOM 객체로 만드는 함수
     getInput: function getInput() {
@@ -236,7 +249,7 @@ var UIController = function () {
       // placeholder text를 실제 객체로 바꾼다
       newHtml = html.replace('%id%', obj.id);
       newHtml = newHtml.replace('%description%', obj.description);
-      newHtml = newHtml.replace('%value%', obj.value);
+      newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -264,9 +277,11 @@ var UIController = function () {
 
     // 총 예산 현황을 HTML 요소에 대입해 띄우는 함수
     displayBudget: function displayBudget(obj) {
-      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+      var type = void 0;
+      var budget = obj.budget > 0 ? type = 'inc' : type = 'exp'; // 삼항 연산자
+      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(budget, type);
+      document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+      document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
 
       if (obj.percentage > 0) {
         document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
@@ -284,14 +299,14 @@ var UIController = function () {
         }
       };
       nodeListForEach(fields, function (current, index) {
+        var result = current;
         if (percentages[index] > 0) {
-          current.textContent = percentages[index] + '%';
+          result.textContent = percentages[index] + '%';
         } else {
-          current.textContent = '---';
+          result.textContent = '---';
         }
       });
     },
-
 
     // DOMStrings object를 호출하는 함수
     getDOMStrings: function getDOMStrings() {

@@ -129,6 +129,19 @@ const UIController = (() => {
     expensesPercLabel: '.item__percentage',
   };
 
+  // 숫자 포맷을 정하는 함수
+  const formatNumber = (num, type) => {
+    const numAbs = Math.abs(num);
+    const numFixed = numAbs.toFixed(2);
+    const numSplit = numFixed.split('.');
+    let int = numSplit[0];
+    if (int.length > 3) {
+      int = `${int.substr(0, int.length - 3)},${int.substr(int.length - 3, 3)}`;
+    }
+    const dec = numSplit[1];
+    return `${type === 'exp' ? '-' : '+'} ${int}.${dec}`;
+  };
+
   return {
     // input 값을 DOM 객체로 만드는 함수
     getInput: () => ({
@@ -165,7 +178,7 @@ const UIController = (() => {
       // placeholder text를 실제 객체로 바꾼다
       newHtml = html.replace('%id%', obj.id);
       newHtml = newHtml.replace('%description%', obj.description);
-      newHtml = newHtml.replace('%value%', obj.value);
+      newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 
       // 값을 HTML 위에 띄운다
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -193,9 +206,11 @@ const UIController = (() => {
 
     // 총 예산 현황을 HTML 요소에 대입해 띄우는 함수
     displayBudget: (obj) => {
-      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+      let type;
+      if (obj.budget > 0) { type = 'inc'; } else { type = 'exp'; }
+      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+      document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
 
       if (obj.percentage > 0) {
         document.querySelector(DOMStrings.percentageLabel).textContent = `${obj.percentage}%`;
@@ -205,7 +220,7 @@ const UIController = (() => {
     },
 
     // percentage를 계산해서 화면에 띄우는 함수
-    displayPercentages(percentages) {
+    displayPercentages: (percentages) => {
       const fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
       const nodeListForEach = (list, callback) => {
         for (let i = 0; i < list.length; i += 1) {
