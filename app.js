@@ -126,6 +126,7 @@ const UIController = (() => {
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
+    expensesPercLabel: '.item__percentage',
   };
 
   return {
@@ -203,6 +204,24 @@ const UIController = (() => {
       }
     },
 
+    // percentage를 계산해서 화면에 띄우는 함수
+    displayPercentages(percentages) {
+      const fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
+      const nodeListForEach = (list, callback) => {
+        for (let i = 0; i < list.length; i += 1) {
+          callback(list[i], i);
+        }
+      };
+      nodeListForEach(fields, (current, index) => {
+        const result = current;
+        if (percentages[index] > 0) {
+          result.textContent = `${percentages[index]}%`;
+        } else {
+          result.textContent = '---';
+        }
+      });
+    },
+
     // DOMStrings object를 호출하는 함수
     getDOMStrings: () => DOMStrings,
   };
@@ -231,8 +250,7 @@ const controller = ((budgetCtrl, UICtrl) => {
     const percentages = budgetCtrl.getPercentages();
 
     //    3. UI에 업데이트하기
-    console.log(percentages);
-
+    UICtrl.displayPercentages(percentages);
   };
 
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수

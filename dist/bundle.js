@@ -1,2 +1,409 @@
-!function(e){function t(i){if(n[i])return n[i].exports;var c=n[i]={i:i,l:!1,exports:{}};return e[i].call(c.exports,c,c.exports,t),c.l=!0,c.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,i){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:i})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){"use strict";var i=function(){function e(e,t,n){this.id=e,this.description=t,this.value=n}function t(e,t,n){this.id=e,this.description=t,this.value=n}e.prototype.calcPercentage=function(e){this.percentage=e>0?Math.round(this.value/e*100):-1},e.prototype.getPercentage=function(){return this.percentage};var n={allItems:{exp:[],inc:[]},totals:{exp:0,inc:0},budget:0,percentage:-1},i=function(e){var t=0;n.allItems[e].forEach(function(e){t+=e.value}),n.totals[e]=t};return{addItem:function(i,c,a){var r=void 0,o=void 0;return o=n.allItems[i].length>0?n.allItems[i][n.allItems[i].length-1].id+1:0,"exp"===i?r=new e(o,c,a):"inc"===i&&(r=new t(o,c,a)),n.allItems[i].push(r),r},deleteItem:function(e,t){var i=n.allItems[e].map(function(e){return e.id}),c=i.indexOf(t);-1!==c&&n.allItems[e].splice(c,1)},calculateBudget:function(){i("exp"),i("inc"),n.budget=n.totals.inc-n.totals.exp,n.totals.inc>0?n.percentage=Math.round(n.totals.exp/n.totals.inc*100):n.percentage=-1},calculatePercentages:function(){n.allItems.exp.forEach(function(e){e.calcPercentage(n.totals.inc)})},getPercentages:function(){return n.allItems.exp.map(function(e){return e.getPercentage()})},getBudget:function(){return{budget:n.budget,totalInc:n.totals.inc,totalExp:n.totals.exp,percentage:n.percentage}}}}(),c=function(){var e={expenseContainer:".expenses__list",incomeContainer:".income__list",inputButton:".add__btn",inputDescription:".add__description",inputType:".add__type",inputValue:".add__value",budgetLabel:".budget__value",incomeLabel:".budget__income--value",expensesLabel:".budget__expenses--value",percentageLabel:".budget__expenses--percentage",container:".container"};return{getInput:function(){return{description:document.querySelector(e.inputDescription).value,type:document.querySelector(e.inputType).value,value:document.querySelector(e.inputValue).valueAsNumber}},addListItem:function(t,n){var i=void 0,c=void 0,a=void 0;"inc"===n?(i='<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>',a=e.incomeContainer):"exp"===n&&(i='<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>',a=e.expenseContainer),c=i.replace("%id%",t.id),c=c.replace("%description%",t.description),c=c.replace("%value%",t.value),document.querySelector(a).insertAdjacentHTML("beforeend",c)},deleteListItem:function(e){var t=document.getElementById(e);t.parentNode.removeChild(t)},clearFields:function(){var t=document.querySelectorAll(e.inputDescription+", "+e.inputValue);Array.prototype.slice.call(t).forEach(function(e){e.value=""})},displayBudget:function(t){document.querySelector(e.budgetLabel).textContent=t.budget,document.querySelector(e.incomeLabel).textContent=t.totalInc,document.querySelector(e.expensesLabel).textContent=t.totalExp,t.percentage>0?document.querySelector(e.percentageLabel).textContent=t.percentage+"%":document.querySelector(e.percentageLabel).textContent="---"},getDOMStrings:function(){return e}}}();(function(e,t){var n=function(){e.calculateBudget();var n=e.getBudget();t.displayBudget(n)},i=function(){e.calculatePercentages();var t=e.getPercentages();console.log(t)},c=function(){var c=t.getInput();if(""!==c.description&&!Number.isNaN(c.value)&&c.value>0){var a=e.addItem(c.type,c.description,c.value);t.addListItem(a,c.type),t.clearFields(),n(),i()}},a=function(n){var i=n.target.parentNode.parentNode.parentNode.id;if(i){var c=i.split("-"),a=c[0],r=parseInt(c[1],10);e.deleteItem(a,r),t.deleteListItem(i)}},r=function(){var e=t.getDOMStrings();document.querySelector(e.inputButton).addEventListener("click",c),document.addEventListener("keypress",function(e){13!==e.keyCode&&13!==e.which||c()}),document.querySelector(e.container).addEventListener("click",a)};return{init:function(){t.displayBudget({budget:0,totalInc:0,totalExp:0,percentage:-1}),r()}}})(i,c).init()}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// 예산 컨트롤러
+var budgetController = function () {
+  function Expense(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  }
+
+  Expense.prototype.calcPercentage = function (totalIncome) {
+    if (totalIncome > 0) {
+      this.percentage = Math.round(this.value / totalIncome * 100);
+    } else {
+      this.percentage = -1;
+    }
+  };
+
+  Expense.prototype.getPercentage = function () {
+    return this.percentage;
+  };
+
+  function Income(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  }
+
+  var data = {
+    allItems: {
+      exp: [],
+      inc: []
+    },
+    totals: {
+      exp: 0,
+      inc: 0
+    },
+    budget: 0,
+    percentage: -1
+  };
+
+  var calculateTotal = function calculateTotal(type) {
+    var sum = 0;
+    data.allItems[type].forEach(function (cur) {
+      sum += cur.value;
+    });
+    data.totals[type] = sum;
+  };
+
+  return {
+    addItem: function addItem(type, des, val) {
+      var newItem = void 0;
+      var ID = void 0;
+
+      // 아이디는 배열 마지막 아이템의 아이디 +1 이다
+      if (data.allItems[type].length > 0) {
+        ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+      } else {
+        ID = 0;
+      }
+
+      // 수입 지출을 구분하는 조건문
+      if (type === 'exp') {
+        newItem = new Expense(ID, des, val);
+      } else if (type === 'inc') {
+        newItem = new Income(ID, des, val);
+      }
+
+      data.allItems[type].push(newItem);
+      return newItem;
+    },
+    deleteItem: function deleteItem(type, id) {
+      // allItems.type array의 요소마다 콜백 함수를 적용해 새로운 array를 반환한다
+      // ids는 allItems.type의 각 요소들의 id 값으로 이루어진 array가 된다
+      var ids = data.allItems[type].map(function (current) {
+        return current.id;
+      });
+
+      // id 값으로 이루어진 array에서 id 값에 해당하는 index를 찾는다
+      var index = ids.indexOf(id);
+
+      // 아이템이 존재하기면 하면 작동하도록 함(index는 0부터 시작되는 양의 정수니까)
+      if (index !== -1) {
+        data.allItems[type].splice(index, 1);
+      }
+    },
+    calculateBudget: function calculateBudget() {
+      //  총 수입 / 지출 계산
+      calculateTotal('exp');
+      calculateTotal('inc');
+
+      //  총 예산 계산: 수입 - 지출
+      data.budget = data.totals.inc - data.totals.exp;
+
+      //  총 수입 대비 지출율 계산
+      if (data.totals.inc > 0) {
+        data.percentage = Math.round(data.totals.exp / data.totals.inc * 100);
+      } else {
+        data.percentage = -1;
+      }
+    },
+    calculatePercentages: function calculatePercentages() {
+      data.allItems.exp.forEach(function (cur) {
+        cur.calcPercentage(data.totals.inc);
+      });
+    },
+    getPercentages: function getPercentages() {
+      return data.allItems.exp.map(function (cur) {
+        return cur.getPercentage();
+      });
+    },
+
+    getBudget: function getBudget() {
+      return {
+        budget: data.budget,
+        totalInc: data.totals.inc,
+        totalExp: data.totals.exp,
+        percentage: data.percentage
+      };
+    }
+  };
+}();
+
+// UI 컨트롤러
+var UIController = function () {
+  var DOMStrings = {
+    expenseContainer: '.expenses__list',
+    incomeContainer: '.income__list',
+    inputButton: '.add__btn',
+    inputDescription: '.add__description',
+    inputType: '.add__type',
+    inputValue: '.add__value',
+    budgetLabel: '.budget__value',
+    incomeLabel: '.budget__income--value',
+    expensesLabel: '.budget__expenses--value',
+    percentageLabel: '.budget__expenses--percentage',
+    container: '.container',
+    expensesPercLabel: '.item__percentage'
+  };
+
+  return {
+    // input 값을 DOM 객체로 만드는 함수
+    getInput: function getInput() {
+      return {
+        description: document.querySelector(DOMStrings.inputDescription).value,
+        type: document.querySelector(DOMStrings.inputType).value,
+        value: document.querySelector(DOMStrings.inputValue).valueAsNumber
+      };
+    },
+
+    // DOM 객체를 이용해 HTML 아이템을 만들어 리스트에 띄우는 함수
+    addListItem: function addListItem(obj, type) {
+      var html = void 0;
+      var newHtml = void 0;
+      var element = void 0;
+
+      // placeholder text를 만든다
+      if (type === 'inc') {
+        html = '<div class="item clearfix" id="inc-%id%">' + '<div class="item__description">%description%</div>' + '<div class="right clearfix"><div class="item__value">%value%</div>' + '<div class="item__delete">' + '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' + '</div></div></div>';
+        element = DOMStrings.incomeContainer;
+      } else if (type === 'exp') {
+        html = '<div class="item clearfix" id="exp-%id%">' + '<div class="item__description">%description%</div>' + '<div class="right clearfix"><div class="item__value">%value%</div>' + '<div class="item__percentage">21%</div><div class="item__delete">' + '<button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>' + '</div></div></div>';
+        element = DOMStrings.expenseContainer;
+      }
+
+      // placeholder text를 실제 객체로 바꾼다
+      newHtml = html.replace('%id%', obj.id);
+      newHtml = newHtml.replace('%description%', obj.description);
+      newHtml = newHtml.replace('%value%', obj.value);
+
+      // 값을 HTML 위에 띄운다
+      document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+    },
+
+    // HTML 아이템을 삭제하는 함수
+    deleteListItem: function deleteListItem(selectorID) {
+      // 삭제하려는 요소의 부모 요소를 지정한다
+      var element = document.getElementById(selectorID);
+      // 부모 요소의 자식 요소를 삭제하는데, 그 인자는 부모 요소가 된다
+      element.parentNode.removeChild(element);
+    },
+
+    // 입력이 끝난 뒤 input fields를 초기화시키는 함수
+    clearFields: function clearFields() {
+      var fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+
+      var fieldsArr = Array.prototype.slice.call(fields);
+
+      fieldsArr.forEach(function (element) {
+        var result = element;
+        result.value = '';
+      });
+    },
+
+    // 총 예산 현황을 HTML 요소에 대입해 띄우는 함수
+    displayBudget: function displayBudget(obj) {
+      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+
+      if (obj.percentage > 0) {
+        document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
+      } else {
+        document.querySelector(DOMStrings.percentageLabel).textContent = '---';
+      }
+    },
+
+    // percentage를 계산해서 화면에 띄우는 함수
+    displayPercentages: function displayPercentages(percentages) {
+      var fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
+      var nodeListForEach = function nodeListForEach(list, callback) {
+        for (var i = 0; i < list.length; i += 1) {
+          callback(list[i], i);
+        }
+      };
+      nodeListForEach(fields, function (current, index) {
+        if (percentages[index] > 0) {
+          current.textContent = percentages[index] + '%';
+        } else {
+          current.textContent = '---';
+        }
+      });
+    },
+
+
+    // DOMStrings object를 호출하는 함수
+    getDOMStrings: function getDOMStrings() {
+      return DOMStrings;
+    }
+  };
+}();
+
+// 글로벌 앱 컨트롤러
+var controller = function (budgetCtrl, UICtrl) {
+  // 총 예산 업데이트 함수
+  var updateBudget = function updateBudget() {
+    //    1. 예산을 계산하기
+    budgetCtrl.calculateBudget();
+
+    //    2. 예산을 리턴하기
+    var budget = budgetCtrl.getBudget();
+
+    //    3. 예산을 UI에 띄우기
+    UICtrl.displayBudget(budget);
+  };
+
+  // 수입 대비 지출 계산 함수
+  var updatePercentages = function updatePercentages() {
+    //    1. percentage 계산
+    budgetCtrl.calculatePercentages();
+
+    //    2. budget controller에서 percentage 읽기
+    var percentages = budgetCtrl.getPercentages();
+
+    //    3. UI에 업데이트하기
+    UICtrl.displayPercentages(percentages);
+  };
+
+  // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
+  var ctrlAddItem = function ctrlAddItem() {
+    //    1. input data를 item에  담기
+    var input = UICtrl.getInput();
+
+    // NaN 값이 들어오는 걸 방지하기 위해 조건문 설정
+    // description 값이 들어와야 하며, value가 isNaN이어서는 안 되며, value는 0보다 커야 한다
+    if (input.description !== '' && !Number.isNaN(input.value) && input.value > 0) {
+      //    2. item을 budget controller에 넘기기
+      var newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+
+      //    3. item을 UI에 추가하기
+      UICtrl.addListItem(newItem, input.type);
+
+      //    4. input 창을 지우기
+      UICtrl.clearFields();
+
+      //    5. 예산을 계산하고 업데이트하기
+      updateBudget();
+
+      //    6. percentage 계산하고 업데이트하기
+      updatePercentages();
+    }
+  };
+
+  // DOM 객체를 삭제하는 함수
+  var ctrlDeleteItem = function ctrlDeleteItem(event) {
+    var itemID = event.target.parentNode.parentNode.parentNode.id;
+    if (itemID) {
+      var splitID = itemID.split('-');
+      var type = splitID[0];
+      var ID = parseInt(splitID[1], 10); // 10진수 정수로 변환
+
+      //  1. item을 자료구조에서 삭제
+      budgetCtrl.deleteItem(type, ID);
+
+      //  2. item을 UI에서 삭제
+      UICtrl.deleteListItem(itemID);
+
+      //  3. 예산을 업데이트하고 새로운 예산을 보여줌
+    }
+  };
+
+  // 이벤트 리스너 함수
+  var setupEventListeners = function setupEventListeners() {
+    // UIController에 정의해 둔 CSS 선택자를 꺼낸다
+    var DOM = UICtrl.getDOMStrings();
+
+    // 이벤트 리스너 1. 체크 버튼을 누를 경우
+    document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
+
+    // 이벤트 리스너 2. enter 키를 누를 경우
+    document.addEventListener('keypress', function (event) {
+      if (event.keyCode === 13 || event.which === 13) {
+        ctrlAddItem();
+      }
+    });
+
+    // 이벤트 리스너 3. delete 버튼을 누를 경우
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+  };
+
+  return {
+    init: function init() {
+      UICtrl.displayBudget({
+        budget: 0,
+        totalInc: 0,
+        totalExp: 0,
+        percentage: -1
+      });
+      setupEventListeners();
+    }
+  };
+}(budgetController, UIController);
+
+// 컨트롤러 함수를 초기화
+controller.init();
+
+/***/ })
+/******/ ]);
 //# sourceMappingURL=bundle.js.map
