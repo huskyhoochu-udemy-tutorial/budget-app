@@ -205,7 +205,8 @@ var UIController = function () {
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
-    expensesPercLabel: '.item__percentage'
+    expensesPercLabel: '.item__percentage',
+    dateLabel: '.budget__title--month'
   };
 
   // 숫자 포맷을 정하는 함수
@@ -278,8 +279,12 @@ var UIController = function () {
     // 총 예산 현황을 HTML 요소에 대입해 띄우는 함수
     displayBudget: function displayBudget(obj) {
       var type = void 0;
-      var budget = obj.budget > 0 ? type = 'inc' : type = 'exp'; // 삼항 연산자
-      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(budget, type);
+      if (obj.budget > 0) {
+        type = 'inc';
+      } else {
+        type = 'exp';
+      }
+      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
       document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
       document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
 
@@ -306,6 +311,14 @@ var UIController = function () {
           result.textContent = '---';
         }
       });
+    },
+
+    // 화면 위에 몇 월인지 보여주는 함수
+    displayMonth: function displayMonth() {
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = '' + ('0' + (now.getMonth() + 1)).slice(-2);
+      document.querySelector(DOMStrings.dateLabel).textContent = year + '-' + month;
     },
 
     // DOMStrings object를 호출하는 함수
@@ -411,6 +424,7 @@ var controller = function (budgetCtrl, UICtrl) {
         totalExp: 0,
         percentage: -1
       });
+      UICtrl.displayMonth();
       setupEventListeners();
     }
   };

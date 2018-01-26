@@ -127,6 +127,7 @@ const UIController = (() => {
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
     expensesPercLabel: '.item__percentage',
+    dateLabel: '.budget__title--month',
   };
 
   // 숫자 포맷을 정하는 함수
@@ -237,6 +238,14 @@ const UIController = (() => {
       });
     },
 
+    // 화면 위에 몇 월인지 보여주는 함수
+    displayMonth: () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = `${(`0${now.getMonth() + 1}`).slice(-2)}`;
+      document.querySelector(DOMStrings.dateLabel).textContent = `${year}-${month}`;
+    },
+
     // DOMStrings object를 호출하는 함수
     getDOMStrings: () => DOMStrings,
   };
@@ -338,6 +347,7 @@ const controller = ((budgetCtrl, UICtrl) => {
         totalExp: 0,
         percentage: -1,
       });
+      UICtrl.displayMonth();
       setupEventListeners();
     },
   };
