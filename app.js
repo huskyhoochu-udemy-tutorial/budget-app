@@ -6,6 +6,18 @@ const budgetController = (() => {
     this.value = value;
   }
 
+  Expense.prototype.calcPercentage = function (totalIncome) {
+    if (totalIncome > 0) {
+      this.percentage = Math.round((this.value / totalIncome) * 100);
+    } else {
+      this.percentage = -1;
+    }
+  };
+
+  Expense.prototype.getPercentage = function () {
+    return this.percentage;
+  };
+
   function Income(id, description, value) {
     this.id = id;
     this.description = description;
@@ -82,6 +94,14 @@ const budgetController = (() => {
       } else {
         data.percentage = -1;
       }
+    },
+    calculatePercentages() {
+      data.allItems.exp.forEach((cur) => {
+        cur.calcPercentage(data.totals.inc);
+      });
+    },
+    getPercentages() {
+      return data.allItems.exp.map(cur => cur.getPercentage());
     },
     getBudget: () => ({
       budget: data.budget,
@@ -205,8 +225,14 @@ const controller = ((budgetCtrl, UICtrl) => {
   // 수입 대비 지출 계산 함수
   const updatePercentages = () => {
     //    1. percentage 계산
+    budgetCtrl.calculatePercentages();
+
     //    2. budget controller에서 percentage 읽기
+    const percentages = budgetCtrl.getPercentages();
+
     //    3. UI에 업데이트하기
+    console.log(percentages);
+
   };
 
   // HTML 문서에서 필요한 DOM 객체만 가져와 item으로 가공하는 함수
